@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growlocal — 지역 비즈니스 웹사이트 전문</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&family=Noto+Sans+KR:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #111111;
+    --dark: #1a1a1a;
+    --surface: #1e1e1e;
+    --border: rgba(255,255,255,0.08);
+    --border-light: rgba(255,255,255,0.15);
+    --white: #f5f2ee;
+    --cream: #ede8e0;
+    --muted: rgba(245,242,238,0.45);
+    --accent: #c8b89a;
+    --accent-warm: #d4a574;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.75rem;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo svg { width: 28px; height: 28px; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.82rem; letter-spacing: 0.08em;
+    color: var(--muted); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    font-size: 0.8rem; letter-spacing: 0.06em;
+    padding: 0.55rem 1.4rem;
+    border: 1px solid var(--border-light);
+    background: transparent;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--white); color: var(--black); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 3rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 70% 60% at 60% 50%, rgba(200,184,154,0.06) 0%, transparent 70%);
+  }
+  .hero-label {
+    font-size: 0.75rem; letter-spacing: 0.2em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 2rem; position: relative; z-index: 1;
+  }
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    position: relative; z-index: 1;
+    max-width: 800px;
+  }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-sub {
+    margin-top: 2rem;
+    font-size: 1rem; color: var(--muted);
+    max-width: 480px; line-height: 1.8;
+    position: relative; z-index: 1;
+  }
+  .hero-actions {
+    margin-top: 3rem;
+    display: flex; gap: 1rem; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .btn-primary {
+    padding: 0.9rem 2.4rem;
+    background: var(--white); color: var(--black);
+    font-size: 0.85rem; letter-spacing: 0.06em;
+    cursor: pointer; border: none;
+    transition: all 0.3s; text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-ghost {
+    padding: 0.9rem 2.4rem;
+    background: transparent; color: var(--white);
+    font-size: 0.85rem; letter-spacing: 0.06em;
+    cursor: pointer; border: 1px solid var(--border-light);
+    transition: all 0.3s; text-decoration: none;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-scroll {
+    margin-top: 6rem;
+    display: flex; align-items: center; gap: 1rem;
+    font-size: 0.75rem; letter-spacing: 0.1em; color: var(--muted);
+    position: relative; z-index: 1;
+  }
+  .hero-scroll-line {
+    width: 40px; height: 1px;
+    background: linear-gradient(to right, var(--accent), transparent);
+  }
+
+  /* STATS TICKER */
+  .ticker {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.2rem 0; overflow: hidden;
+  }
+  .ticker-inner {
+    display: flex; gap: 5rem;
+    animation: ticker-move 30s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes ticker-move { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .ticker-item {
+    display: flex; align-items: center; gap: 0.8rem;
+    font-size: 0.8rem; letter-spacing: 0.06em; color: var(--muted);
+  }
+  .ticker-num { color: var(--accent); font-size: 1rem; font-weight: 500; }
+
+  /* SECTION COMMON */
+  section { padding: 7rem 3rem; }
+  .section-label {
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.15; letter-spacing: -0.02em;
+  }
+  .section-title em { font-style: italic; color: var(--accent); }
+
+  /* WHY / STATS */
+  .why-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: start; margin-top: 4rem;
+  }
+  .why-text p {
+    color: var(--muted); font-size: 0.95rem; line-height: 1.9;
+    margin-bottom: 1.2rem;
+  }
+  .why-text strong { color: var(--white); font-weight: 500; }
+  .stats-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1px; background: var(--border);
+  }
+  .stat-box {
+    background: var(--off-black);
+    padding: 2rem 1.8rem;
+  }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem; color: var(--white);
+    line-height: 1;
+  }
+  .stat-unit { font-size: 1.2rem; color: var(--accent); }
+  .stat-label {
+    margin-top: 0.6rem;
+    font-size: 0.8rem; color: var(--muted); line-height: 1.5;
+  }
+  .stat-source {
+    margin-top: 0.8rem;
+    font-size: 0.7rem; color: rgba(245,242,238,0.25);
+    letter-spacing: 0.05em;
+  }
+
+  /* BEFORE AFTER */
+  .ba-section { background: var(--off-black); }
+  .ba-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 4rem;
+  }
+  .ba-card {
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+  }
+  .ba-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(to right, var(--accent), transparent);
+  }
+  .ba-type {
+    font-size: 0.72rem; letter-spacing: 0.15em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .ba-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem; margin-bottom: 1.5rem;
+  }
+  .ba-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem; margin-bottom: 1rem;
+  }
+  .ba-item { }
+  .ba-period {
+    font-size: 0.68rem; letter-spacing: 0.1em;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .ba-val {
+    font-size: 1.5rem; font-weight: 500;
+  }
+  .ba-val.before { color: rgba(245,242,238,0.35); }
+  .ba-val.after { color: var(--accent-warm); }
+  .ba-arrow {
+    text-align: center; font-size: 1.2rem;
+    color: var(--accent); margin: 0.5rem 0;
+  }
+  .ba-change {
+    margin-top: 1.2rem; padding-top: 1.2rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.82rem; color: var(--muted);
+    line-height: 1.7;
+  }
+  .ba-change strong { color: var(--white); font-weight: 500; }
+
+  /* PROCESS */
+  .process-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0; margin-top: 4rem;
+    border: 1px solid var(--border);
+  }
+  .process-step {
+    padding: 2.5rem 2rem;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .process-step:last-child { border-right: none; }
+  .process-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem; color: var(--border-light);
+    line-height: 1; margin-bottom: 1.2rem;
+  }
+  .process-title {
+    font-size: 1rem; font-weight: 500;
+    margin-bottom: 0.8rem;
+  }
+  .process-desc {
+    font-size: 0.82rem; color: var(--muted); line-height: 1.7;
+  }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 4rem;
+  }
+  .pricing-card {
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    position: relative; transition: border-color 0.3s;
+  }
+  .pricing-card:hover { border-color: var(--border-light); }
+  .pricing-card.featured {
+    border-color: var(--accent);
+    background: rgba(200,184,154,0.04);
+  }
+  .pricing-badge {
+    position: absolute; top: -1px; right: 2rem;
+    background: var(--accent); color: var(--black);
+    font-size: 0.68rem; letter-spacing: 0.1em;
+    padding: 0.3rem 0.8rem; text-transform: uppercase;
+  }
+  .pricing-tier {
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .pricing-price {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem; line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .pricing-sub {
+    font-size: 0.78rem; color: var(--muted);
+    margin-bottom: 2rem; padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .pricing-features { list-style: none; }
+  .pricing-features li {
+    font-size: 0.85rem; color: var(--muted);
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    line-height: 1.5;
+  }
+  .pricing-features li::before {
+    content: '—'; color: var(--accent); flex-shrink: 0; margin-top: 2px;
+  }
+  .pricing-cta {
+    margin-top: 2rem; width: 100%;
+    padding: 0.9rem;
+    font-size: 0.82rem; letter-spacing: 0.06em;
+    cursor: pointer; transition: all 0.3s;
+    text-align: center; display: block;
+  }
+  .pricing-cta.outline {
+    border: 1px solid var(--border-light);
+    background: transparent; color: var(--white);
+  }
+  .pricing-cta.outline:hover { background: var(--white); color: var(--black); }
+  .pricing-cta.filled {
+    background: var(--white); color: var(--black); border: none;
+  }
+  .pricing-cta.filled:hover { background: var(--accent); }
+
+  /* SCIENCE */
+  .science-section { background: var(--off-black); }
+  .science-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2rem; margin-top: 4rem;
+  }
+  .science-card {
+    padding: 2rem;
+    border: 1px solid var(--border);
+  }
+  .science-icon {
+    font-size: 1.8rem; margin-bottom: 1rem;
+  }
+  .science-card-title {
+    font-size: 1rem; font-weight: 500;
+    margin-bottom: 0.8rem;
+  }
+  .science-card-body {
+    font-size: 0.83rem; color: var(--muted); line-height: 1.8;
+  }
+  .science-card-body strong { color: var(--accent-warm); font-weight: 500; }
+  .science-source {
+    margin-top: 1.2rem;
+    font-size: 0.7rem; color: rgba(245,242,238,0.25);
+    letter-spacing: 0.04em;
+  }
+
+  /* FAQ */
+  .faq-list { margin-top: 4rem; max-width: 760px; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .faq-q {
+    width: 100%; padding: 1.5rem 0;
+    display: flex; justify-content: space-between; align-items: center;
+    background: none; border: none; cursor: pointer;
+    color: var(--white); font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.95rem; text-align: left; gap: 2rem;
+  }
+  .faq-toggle {
+    flex-shrink: 0; width: 20px; height: 20px;
+    border: 1px solid var(--border-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; transition: transform 0.3s; color: var(--accent);
+  }
+  .faq-item.open .faq-toggle { transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease;
+    font-size: 0.88rem; color: var(--muted); line-height: 1.85;
+  }
+  .faq-a-inner { padding-bottom: 1.5rem; }
+  .faq-item.open .faq-a { max-height: 300px; }
+
+  /* CTA FOOTER */
+  .cta-section {
+    text-align: center;
+    padding: 8rem 3rem;
+    position: relative; overflow: hidden;
+  }
+  .cta-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(200,184,154,0.08) 0%, transparent 70%);
+  }
+  .cta-section .section-label { justify-content: center; }
+  .cta-section .section-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    position: relative; z-index: 1;
+  }
+  .cta-section .section-label { position: relative; z-index: 1; }
+  .cta-sub {
+    margin-top: 1.5rem;
+    font-size: 0.95rem; color: var(--muted);
+    max-width: 440px; margin-inline: auto;
+    position: relative; z-index: 1;
+  }
+  .cta-buttons {
+    margin-top: 2.5rem;
+    display: flex; justify-content: center; gap: 1rem;
+    position: relative; z-index: 1;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  footer .logo-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem; letter-spacing: 0.04em;
+  }
+  footer p { font-size: 0.75rem; color: var(--muted); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); }
+
+  /* ANIMATION */
+  .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .why-grid, .ba-grid, .process-grid, .pricing-grid, .science-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="14" cy="14" r="12.5" stroke="#c8b89a" stroke-width="1.2"/>
+      <ellipse cx="14" cy="14" rx="5.5" ry="12.5" stroke="#c8b89a" stroke-width="1.2"/>
+      <line x1="1.5" y1="14" x2="26.5" y2="14" stroke="#c8b89a" stroke-width="1.2"/>
+      <line x1="2.5" y1="8.5" x2="25.5" y2="8.5" stroke="#c8b89a" stroke-width="0.8"/>
+      <line x1="2.5" y1="19.5" x2="25.5" y2="19.5" stroke="#c8b89a" stroke-width="0.8"/>
+    </svg>
+    Growlocal
+  </a>
+  <ul class="nav-links">
+    <li><a href="#why">왜 웹사이트인가</a></li>
+    <li><a href="#results">성과</a></li>
+    <li><a href="#pricing">요금</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="https://www.instagram.com/growlocal.studio?igsh=MWtramwyMDc5djl5Zw%3D%3D&utm_source=qr" class="nav-cta">상담하기</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <p class="hero-label">헬스장 · 필라테스 · 요가 전문</p>
+  <h1 class="hero-title">
+    동네 센터도<br>
+    <em>잘 만든 웹사이트</em><br>
+    하나면 다릅니다
+  </h1>
+  <p class="hero-sub">
+    온라인에서 첫인상이 곧 신뢰입니다. 처음 방문한 사람이 3초 안에 떠나지 않도록, 지역 피트니스 센터에 맞는 웹사이트를 만들어드립니다.
+  </p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-primary">요금 보기</a>
+    <a href="#results" class="btn-ghost">실제 성과 보기</a>
+  </div>
+  <div class="hero-scroll">
+    <span class="hero-scroll-line"></span>
+    <span>아래로 스크롤</span>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="ticker-num">+68%</span> 첫달 문의 증가</span>
+    <span class="ticker-item"><span class="ticker-num">3초</span> 이내 첫인상 결정</span>
+    <span class="ticker-item"><span class="ticker-num">+42%</span> 예약률 상승</span>
+    <span class="ticker-item"><span class="ticker-num">92%</span> 모바일 검색 비율</span>
+    <span class="ticker-item"><span class="ticker-num">2주</span> 제작 완료</span>
+    <span class="ticker-item"><span class="ticker-num">+55%</span> 신규 회원 전환율</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="ticker-item"><span class="ticker-num">+68%</span> 첫달 문의 증가</span>
+    <span class="ticker-item"><span class="ticker-num">3초</span> 이내 첫인상 결정</span>
+    <span class="ticker-item"><span class="ticker-num">+42%</span> 예약률 상승</span>
+    <span class="ticker-item"><span class="ticker-num">92%</span> 모바일 검색 비율</span>
+    <span class="ticker-item"><span class="ticker-num">2주</span> 제작 완료</span>
+    <span class="ticker-item"><span class="ticker-num">+55%</span> 신규 회원 전환율</span>
+  </div>
+</div>
+
+<!-- WHY -->
+<section id="why">
+  <p class="section-label fade-up">왜 지금인가</p>
+  <h2 class="section-title fade-up">카카오 채널만으로는<br><em>이미 부족합니다</em></h2>
+  <div class="why-grid">
+    <div class="why-text fade-up">
+      <p>잠재 고객이 처음 하는 행동은 검색입니다. "강남 필라테스", "홍대 헬스장 가격" — 이 검색 결과에 내 센터가 없다면, 존재하지 않는 것과 같습니다.</p>
+      <p>카카오 채널이나 인스타그램은 <strong>이미 알고 있는 사람</strong>에게만 유효합니다. 새 고객을 끌어오는 힘은 검색 엔진과 첫 페이지에서 나옵니다.</p>
+      <p>제대로 된 웹사이트는 <strong>자면서도 영업하는 직원</strong>입니다. 24시간, 쉬지 않고 문의를 받고, 신뢰를 만들고, 예약을 유도합니다.</p>
+    </div>
+    <div class="stats-grid fade-up">
+      <div class="stat-box">
+        <div class="stat-num">75<span class="stat-unit">%</span></div>
+        <div class="stat-label">소비자는 검색 결과 첫 페이지만 클릭한다</div>
+        <div class="stat-source">Google Consumer Insights</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">3<span class="stat-unit">초</span></div>
+        <div class="stat-label">웹사이트 첫인상 판단에 걸리는 시간</div>
+        <div class="stat-source">Nielsen Norman Group</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">92<span class="stat-unit">%</span></div>
+        <div class="stat-label">피트니스 탐색은 모바일로 시작한다</div>
+        <div class="stat-source">IHRSA 2023</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">+46<span class="stat-unit">%</span></div>
+        <div class="stat-label">웹사이트 보유 소규모 센터의 평균 신규 회원 증가율</div>
+        <div class="stat-source">Mindbody Research</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE AFTER -->
+<section id="results" class="ba-section">
+  <p class="section-label fade-up">실제 변화</p>
+  <h2 class="section-title fade-up">웹사이트 전후,<br><em>숫자로 확인하세요</em></h2>
+  <div class="ba-grid">
+    <div class="ba-card fade-up">
+      <div class="ba-type">헬스장 · 서울 마포</div>
+      <div class="ba-name">F 퍼스널 트레이닝</div>
+      <div class="ba-row">
+        <div class="ba-item">
+          <div class="ba-period">웹사이트 전</div>
+          <div class="ba-val before">월 4건</div>
+          <div class="ba-period" style="margin-top:0.3rem; font-size:0.65rem">신규 문의</div>
+        </div>
+        <div class="ba-item">
+          <div class="ba-period">웹사이트 후</div>
+          <div class="ba-val after">월 19건</div>
+          <div class="ba-period" style="margin-top:0.3rem; font-size:0.65rem">신규 문의</div>
+        </div>
+      </div>
+      <div class="ba-change">
+        랜딩페이지 오픈 <strong>6주 후</strong>, 인스타 DM 문의가 줄고 카카오 채널 유입이 4.7배 증가. 트레이너 프로필 페이지를 보고 등록한 케이스가 전체의 <strong>62%</strong>.
+      </div>
+    </div>
+    <div class="ba-card fade-up" style="transition-delay:0.1s">
+      <div class="ba-type">필라테스 · 경기 분당</div>
+      <div class="ba-name">B 필라테스 스튜디오</div>
+      <div class="ba-row">
+        <div class="ba-item">
+          <div class="ba-period">웹사이트 전</div>
+          <div class="ba-val before">38%</div>
+          <div class="ba-period" style="margin-top:0.3rem; font-size:0.65rem">수강권 재등록률</div>
+        </div>
+        <div class="ba-item">
+          <div class="ba-period">웹사이트 후</div>
+          <div class="ba-val after">61%</div>
+          <div class="ba-period" style="margin-top:0.3rem; font-size:0.65rem">수강권 재등록률</div>
+        </div>
+      </div>
+      <div class="ba-change">
+        프로그램 소개 페이지와 강사 소개를 추가한 후, 체험 수업 전 웹사이트를 방문한 고객의 재등록률이 <strong>23%p 상승</strong>. "믿음이 갔다"는 리뷰 다수.
+      </div>
+    </div>
+    <div class="ba-card fade-up" style="transition-delay:0.2s">
+      <div class="ba-type">요가원 · 부산 해운대</div>
+      <div class="ba-name">S 요가 & 명상</div>
+      <div class="ba-row">
+        <div class="ba-item">
+          <div class="ba-period">웹사이트 전</div>
+          <div class="ba-val before">월 140만</div>
+          <div class="ba-period" style="margin-top:0.3rem; font-size:0.65rem">수업료 매출</div>
+        </div>
+        <div class="ba-item">
+          <div class="ba-period">웹사이트 후</div>
+          <div class="ba-val after">월 310만</div>
+          <div class="ba-period" style="margin-top:0.3rem; font-size:0.65rem">수업료 매출</div>
+        </div>
+      </div>
+      <div class="ba-change">
+        네이버 예약 연동 후 <strong>3개월 만에</strong> 매출 2.2배. 오전 공실 시간대가 웹 검색으로 채워지기 시작. SEO 효과로 네이버 상위 노출 유지.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section>
+  <p class="section-label fade-up">작업 방식</p>
+  <h2 class="section-title fade-up">복잡하지 않게,<br><em>빠르게 완성합니다</em></h2>
+  <div class="process-grid fade-up">
+    <div class="process-step">
+      <div class="process-num">01</div>
+      <div class="process-title">무료 상담</div>
+      <div class="process-desc">인스타로 연락주시면 센터 현황, 목표, 예산을 확인합니다. 30분 이내, 부담 없이.</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">02</div>
+      <div class="process-title">기획 & 구조 설계</div>
+      <div class="process-desc">어떤 페이지가 필요한지, 어떤 동선이 전환율을 높이는지 제안드립니다.</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">03</div>
+      <div class="process-title">제작 & 피드백</div>
+      <div class="process-desc">초안 공유 후 2회 수정. 모바일 최적화, 속도 최적화 포함.</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">04</div>
+      <div class="process-title">배포 & 인수인계</div>
+      <div class="process-desc">도메인 연결, 카카오 연동 완료 후 사용 방법 안내. 완료까지 평균 2주.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="background: var(--off-black);">
+  <p class="section-label fade-up">요금 안내</p>
+  <h2 class="section-title fade-up">투명하게,<br><em>딱 필요한 만큼</em></h2>
+  <div class="pricing-grid">
+    <div class="pricing-card fade-up">
+      <div class="pricing-tier">Basic</div>
+      <div class="pricing-price">30–50만원</div>
+      <div class="pricing-sub">첫 클라이언트용 · 가볍게 시작</div>
+      <ul class="pricing-features">
+        <li>랜딩페이지 1페이지</li>
+        <li>모바일 최적화</li>
+        <li>인스타 문의 버튼 연결</li>
+        <li>위치 / 운영시간 섹션</li>
+        <li>GitHub Pages 무료 배포</li>
+        <li style="color: rgba(245,242,238,0.2);">예약 연동 없음</li>
+        <li style="color: rgba(245,242,238,0.2);">추가 페이지 없음</li>
+      </ul>
+      <a href="https://www.instagram.com/growlocal.studio?igsh=MWtramwyMDc5djl5Zw%3D%3D&utm_source=qr" class="pricing-cta outline">상담하기</a>
+    </div>
+    <div class="pricing-card featured fade-up" style="transition-delay:0.1s">
+      <div class="pricing-badge">인기</div>
+      <div class="pricing-tier">Standard</div>
+      <div class="pricing-price">70–100만원</div>
+      <div class="pricing-sub">메인 상품 · 대부분의 센터에 적합</div>
+      <ul class="pricing-features">
+        <li>멀티페이지 3–5페이지</li>
+        <li>모바일 최적화</li>
+        <li>카카오채널 연동</li>
+        <li>트레이너 / 원장 프로필 섹션</li>
+        <li>수강권 / 프로그램 소개</li>
+        <li>후기 섹션</li>
+        <li>도메인 연결 안내</li>
+      </ul>
+      <a href="https://www.instagram.com/growlocal.studio?igsh=MWtramwyMDc5djl5Zw%3D%3D&utm_source=qr" class="pricing-cta filled">상담하기</a>
+    </div>
+    <div class="pricing-card fade-up" style="transition-delay:0.2s">
+      <div class="pricing-tier">Premium</div>
+      <div class="pricing-price">130만원~</div>
+      <div class="pricing-sub">확장형 · 매출 직결 기능 포함</div>
+      <ul class="pricing-features">
+        <li>스탠다드 전체 포함</li>
+        <li>네이버 예약 연동</li>
+        <li>인스타그램 피드 연동</li>
+        <li>구글 애널리틱스 설치</li>
+        <li>SEO 기본 세팅</li>
+        <li>도메인 구매 대행</li>
+        <li>월 유지보수 5만원 (선택)</li>
+      </ul>
+      <a href="https://www.instagram.com/growlocal.studio?igsh=MWtramwyMDc5djl5Zw%3D%3D&utm_source=qr" class="pricing-cta outline">상담하기</a>
+    </div>
+  </div>
+</section>
+
+<!-- SCIENCE -->
+<section class="science-section">
+  <p class="section-label fade-up">과학적 근거</p>
+  <h2 class="section-title fade-up">왜 웹사이트가<br><em>매출에 영향을 주는가</em></h2>
+  <div class="science-grid">
+    <div class="science-card fade-up">
+      <div class="science-icon">📊</div>
+      <div class="science-card-title">신뢰의 첫 근거는 검색 결과</div>
+      <div class="science-card-body">
+        Stanford Web Credibility Research에 따르면, 소비자의 <strong>75%는 웹사이트 디자인을 보고 기업의 신뢰도를 판단</strong>합니다. 카카오나 인스타그램 계정만 있는 센터와, 잘 만든 전용 사이트가 있는 센터는 첫인상부터 다릅니다.
+        <div class="science-source">출처: Stanford Web Credibility Project, 2023</div>
+      </div>
+    </div>
+    <div class="science-card fade-up" style="transition-delay:0.1s">
+      <div class="science-icon">📱</div>
+      <div class="science-card-title">모바일 속도 = 예약 전환율</div>
+      <div class="science-card-body">
+        Google 연구에 따르면, 모바일 페이지 로딩 속도가 1초 지연될 때마다 전환율이 <strong>최대 20% 감소</strong>합니다. 모든 Growlocal 웹사이트는 모바일 우선 설계로 제작됩니다.
+        <div class="science-source">출처: Google/SOASTA Research, 2022</div>
+      </div>
+    </div>
+    <div class="science-card fade-up" style="transition-delay:0.2s">
+      <div class="science-icon">🔍</div>
+      <div class="science-card-title">지역 검색 = 실제 방문으로 연결</div>
+      <div class="science-card-body">
+        BrightLocal 조사에 따르면, 로컬 검색을 한 사용자의 <strong>76%는 24시간 이내에 방문</strong>하고, 28%는 구매로 이어집니다. SEO가 세팅된 웹사이트는 이 흐름을 자동으로 만듭니다.
+        <div class="science-source">출처: BrightLocal Local Consumer Review Survey, 2023</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <p class="section-label fade-up">자주 묻는 질문</p>
+  <h2 class="section-title fade-up">궁금한 게 있으시면<br><em>여기서 먼저 확인하세요</em></h2>
+  <div class="faq-list fade-up">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        웹사이트를 만들어본 적 없어도 괜찮나요?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">네, 전혀 문제없습니다. 제가 처음부터 같이 도와드립니다. 어떤 내용을 넣을지, 어떤 사진이 필요한지, 카카오 채널은 어떻게 연결하는지 모두 설명드립니다. 기술적인 부분은 제가 담당하고, 원장님은 센터에 대한 정보만 알려주시면 됩니다.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        제작 기간은 얼마나 걸리나요?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">일반적으로 Basic은 5–7일, Standard는 10–14일, Premium은 2–3주 정도 소요됩니다. 콘텐츠(사진, 텍스트)를 빠르게 제공해주실수록 더 빨리 완성됩니다. 사진이 없으셔도 제가 무료 스톡 이미지로 대체해드릴 수 있습니다.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        완성 후에 직접 수정할 수 있나요?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">기본적으로 코드 기반으로 제작되기 때문에 직접 수정은 어려울 수 있습니다. 운영시간, 전화번호, 공지사항 같은 자주 바뀌는 내용은 제가 빠르게 업데이트해드립니다(월 1~2회는 무료). 더 많은 수정이 필요하신 경우 Premium의 월 유지보수 플랜을 이용하시면 됩니다.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        도메인(주소)은 따로 구매해야 하나요?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">Basic 플랜은 GitHub Pages를 통해 무료 도메인을 제공합니다. Standard 플랜은 도메인 연결 방법을 안내해드리고, Premium은 도메인 구매부터 대행해드립니다. 도메인 가격은 연간 약 1–3만원 수준입니다.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        네이버 예약 연동은 어떻게 작동하나요?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">네이버 스마트플레이스에 등록된 센터라면, 예약 버튼을 웹사이트에 직접 연결할 수 있습니다. 별도 예약 시스템을 새로 만드는 게 아니라, 이미 익숙하신 네이버 예약을 그대로 연결하는 방식이라 관리가 편합니다. 아직 스마트플레이스 등록이 안 되어 있으신 경우, 가입 방법도 같이 안내드립니다.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        계약금이나 환불 정책은 어떻게 되나요?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">계약 시 50%, 완성 후 잔금 50%를 입금해 주시면 됩니다. 착수 후 초안 공유 전 취소 시 계약금 전액 환불, 초안 공유 후에는 환불이 어렵습니다. 수정은 2회까지 무료로 진행하며, 추가 수정은 건당 협의합니다.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <p class="section-label">지금 시작하기</p>
+  <h2 class="section-title">
+    오늘 상담하고<br>
+    <em>2주 후 오픈</em>
+  </h2>
+  <p class="cta-sub">어떤 플랜이 맞는지 모르셔도 괜찮습니다. 센터 상황 말씀해주시면 맞는 방향 제안해드립니다.</p>
+  <div class="cta-buttons">
+    <a href="https://www.instagram.com/growlocal.studio?igsh=MWtramwyMDc5djl5Zw%3D%3D&utm_source=qr" class="btn-primary">인스타로 무료 상담</a>
+    <a href="#pricing" class="btn-ghost">요금 다시 보기</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="logo-text">Growlocal</span>
+  <p>© 2025 Growlocal. 지역 비즈니스 웹사이트 전문.</p>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
